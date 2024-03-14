@@ -14,6 +14,14 @@ class Body {
     this.#velocity = velocity;
     this.#force = ORIGIN;
   }
+
+  x() {
+    return this.#position[0];
+  }
+
+  y() {
+    return this.#position[1];
+  }
 }
 
 export default Body;
