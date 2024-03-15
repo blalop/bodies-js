@@ -1,27 +1,36 @@
 import Graphics from "./graphics.js";
 import Map from "./map.js";
 
-const file = await retrieveFile("10k");
-const map = new Map(file);
-const graphics = new Graphics();
+document.getElementById("start").addEventListener("click", start);
 
-while (true) {
-  step();
-  await new Promise(r => setTimeout(r, 500));
-}
+async function start() {
+    const filename = document.getElementById("maps").value;
+    const file = await retrieveFile(filename);
+    const map = new Map(file);
+    const graphics = new Graphics();
 
-function step() {
-  graphics.empty();
-  console.log(map);
-  map.compute(1);
-  map.bodies().forEach((body) => {
-    const [x, y] = map.scale(body);
-    graphics.paint(x, y);
-  });
-}
+    while (true) {
+        step();
+        await sleep(100);
+    }
 
-async function retrieveFile(filename) {
-  const url = `${window.location.href}/inputs/${filename}.txt`;
-  const response = await fetch(url);
-  return await response.text();
+    function step() {
+        graphics.empty();
+        console.log(map);
+        map.compute(1);
+        map.bodies().forEach((body) => {
+            const [x, y] = map.scale(body);
+            graphics.paint(x, y);
+        });
+    }
+
+    async function retrieveFile(filename) {
+        const url = `${window.location.href}/inputs/${filename}.txt`;
+        const response = await fetch(url);
+        return await response.text();
+    }
+
+    async function sleep(ms) {
+        await new Promise((r) => setTimeout(r, ms));
+    }
 }

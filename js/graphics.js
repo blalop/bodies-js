@@ -3,7 +3,7 @@ class Graphics {
 
     paint(x, y) {
         this.#ctx.fillStyle = 'white';
-        this.#ctx.fillRect(x, y, 1, 1);
+        this.#ctx.fillRect(x, y, 2, 2);
     }
 
     empty() {
