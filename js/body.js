@@ -15,12 +15,32 @@ class Body {
         this.#force = ORIGIN;
     }
 
-    x() {
+    get x() {
         return this.#position[0];
     }
 
-    y() {
+    get y() {
         return this.#position[1];
+    }
+
+    get m() {
+        return this.#mass;
+    }
+
+    get vx() {
+        return this.#velocity[0];
+    }
+
+    get vy() {
+        return this.#velocity[1];
+    }
+
+    get fx() {
+        return this.#force[0];
+    }
+
+    get fy() {
+        return this.#force[1];
     }
 
     resetForce() {
@@ -28,25 +48,20 @@ class Body {
     }
 
     calculateForce(body) {
-        const [dx, dy] = [body.x() - this.x(), body.y() - this.y()];
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        const force =
-            (G * this.#mass * body.#mass) / (distance * distance + EPS * EPS);
-        const [fx, fy] = [(force * dx) / distance, (force * dy) / distance];
-        this.#force = [this.#force[0] + fx, this.#force[1] + fy];
+        const [dx, dy] = [body.x - this.x, body.y - this.y];
+        const d = Math.sqrt(dx * dx + dy * dy);
+        const f = (G * this.m * body.m) / (d * d + EPS * EPS);
+        const [fx, fy] = [(f * dx) / d, (f * dy) / d];
+        this.#force = [this.fx + fx, this.fy + fy];
     }
 
-    calculateVelocity(deltatime) {
-        const [vx, vy] = this.#velocity;
-        const [fx, fy] = this.#force;
-        const [ax, ay] = [fx / this.#mass, fy / this.#mass];
-        this.#velocity = [vx + ax * deltatime, vy + ay * deltatime];
+    calculateVelocity(dt) {
+        const [ax, ay] = [this.fx / this.m, this.fy / this.m];
+        this.#velocity = [this.vx + ax * dt, this.vy + ay * dt];
     }
 
-    calculatePosition(deltatime) {
-        const [x, y] = this.#position;
-        const [vx, vy] = this.#velocity;
-        this.#position = [x + vx * deltatime, y + vy * deltatime];
+    calculatePosition(dt) {
+        this.#position = [this.x + this.vx * dt, this.y + this.vy * dt];
     }
 }
 
